@@ -1,5 +1,4 @@
 ﻿Imports UrbanParkCR2026.dbVehiculo
-Imports UrbanParkCR2026.Models
 Imports UrbanParkCR2026.Utils
 
 Public Class EmpleadoVehiculo
@@ -13,33 +12,35 @@ Public Class EmpleadoVehiculo
         End If
     End Sub
 
-    ' =========================
-    ' CARGAR GRID
-    ' =========================
     Private Sub CargarVehiculos()
         gvVehiculos.DataSource = dbVehiculo.ListarVehiculos()
         gvVehiculos.DataBind()
     End Sub
 
-    ' =========================
-    ' ELIMINAR
-    ' =========================
-    Protected Sub gvVehiculos_RowDeleting(sender As Object, e As GridViewDeleteEventArgs)
+    Protected Sub gvVehiculos_RowCommand(sender As Object, e As GridViewCommandEventArgs)
 
-        Dim id As Integer = Convert.ToInt32(gvVehiculos.DataKeys(e.RowIndex).Value)
+        If e.CommandName = "Salida" Then
 
-        Dim resultado As Boolean = dbVehiculo.EliminarVehiculo(id)
+            Dim rowIndex As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim id As Integer = Convert.ToInt32(gvVehiculos.DataKeys(rowIndex).Value)
 
-        If resultado Then
-            SwalUtils.ShowSwal(Me, "Eliminado", "Vehículo eliminado correctamente.", "success")
-        Else
-            SwalUtils.ShowSwalError(Me, "Error", "No se pudo eliminar.")
+            Dim resultado As Boolean = dbVehiculo.RegistrarSalida(id)
+
+            If resultado Then
+                SwalUtils.ShowSwal(Me,
+                                   "Salida registrada",
+                                   "El espacio fue liberado correctamente.",
+                                   "success")
+            Else
+                SwalUtils.ShowSwalError(Me,
+                                        "Error",
+                                        "No se pudo registrar la salida.")
+            End If
+
+            CargarVehiculos()
+
         End If
 
-        CargarVehiculos()
-        e.Cancel = True
-
     End Sub
-
 
 End Class

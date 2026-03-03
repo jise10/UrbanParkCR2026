@@ -14,6 +14,42 @@ Option Explicit On
 Partial Public Class RegistrarEspacio
 
     '''<summary>
+    '''Control hfEspacioId.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents hfEspacioId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''Control lblEspacioSeleccionado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEspacioSeleccionado As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control rptEspacios.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rptEspacios As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''Control pnlFormulario.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlFormulario As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
     '''Control lblPlaca.
     '''</summary>
     '''<remarks>

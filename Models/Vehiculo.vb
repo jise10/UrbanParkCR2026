@@ -10,6 +10,8 @@
 
         Public Property Estado As String
 
+        Public Property IdEspacio As Integer
+
 
         ' Constructores de la clase Vehiculo
         Public Sub New()

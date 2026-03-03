@@ -1,16 +1,12 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="EmpleadoVehiculo.aspx.vb" Inherits="UrbanParkCR2026.EmpleadoVehiculo" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Listado de Vehículos Registrados</h2>
-
-<br />
-
-<asp:GridView ID="gvVehiculos"
+    <asp:GridView ID="gvVehiculos"
     runat="server"
     AutoGenerateColumns="False"
     DataKeyNames="IdVehiculo"
     CssClass="table table-bordered table-striped"
     Width="100%"
-    OnRowDeleting="gvVehiculos_RowDeleting">
+    OnRowCommand="gvVehiculos_RowCommand">
 
     <Columns>
 
@@ -30,18 +26,26 @@
         <asp:BoundField DataField="Color"
             HeaderText="Color" />
 
+        <asp:BoundField DataField="Codigo"
+            HeaderText="Espacio" />
+
         <asp:BoundField DataField="HoraEntrada"
             HeaderText="Hora Entrada"
             DataFormatString="{0:dd/MM/yyyy HH:mm}" />
 
-        <asp:CommandField ShowDeleteButton="True" />
+        <asp:TemplateField HeaderText="Acción">
+            <ItemTemplate>
+                <asp:Button ID="btnSalida"
+                    runat="server"
+                    Text="Registrar Salida"
+                    CommandName="Salida"
+                    CommandArgument='<%# Container.DataItemIndex %>'
+                    CssClass="btn btn-danger btn-sm" />
+            </ItemTemplate>
+        </asp:TemplateField>
 
     </Columns>
 
 </asp:GridView>
-
-<br />
-
-<asp:Label ID="lblMensaje" runat="server"></asp:Label>
 
 </asp:Content>

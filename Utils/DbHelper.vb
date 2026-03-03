@@ -71,6 +71,29 @@ Namespace Utils
             End Using
 
         End Function
+        ' nuevo metodo para ejecutar consultas con parámetros y devolver un DataTable
+        Public Function ExecuteQuery(query As String, Optional parameters As List(Of SqlParameter) = Nothing) As DataTable
+
+            Dim dt As New DataTable()
+
+            Using conn As SqlConnection = GetConnection()
+                Using cmd As New SqlCommand(query, conn)
+
+                    If parameters IsNot Nothing Then
+                        cmd.Parameters.AddRange(parameters.ToArray())
+                    End If
+
+                    conn.Open()
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+
+                End Using
+            End Using
+
+            Return dt
+
+        End Function
 
 
     End Class
