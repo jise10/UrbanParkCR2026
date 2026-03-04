@@ -224,6 +224,8 @@
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="dbEspacio\EspacioDB.vb" />
+    <Compile Include="dbPago\CobroDB.vb" />
+    <Compile Include="dbPago\PagoDB.vb" />
     <Compile Include="dbVehiculo_acceso\VehiculoDB.vb" />
     <Compile Include="Default.aspx.vb">
       <SubType>ASPXCodeBehind</SubType>
@@ -236,6 +238,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Espacio.vb" />
+    <Compile Include="Models\Pago.vb" />
     <Compile Include="Models\Vehiculo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
