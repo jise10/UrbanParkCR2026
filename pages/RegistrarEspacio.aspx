@@ -68,6 +68,7 @@
                         CommandName="select"
                         CommandArgument='<%# Eval("IdEspacio") %>'
                         Enabled='<%# Eval("Estado").ToString() = "Disponible" %>'
+                        CausesValidation="False"
                         CssClass='btn btn-sm w-100 mt-3
                             <%# If(Eval("Estado").ToString() = "Disponible", "btn-outline-primary", "btn-secondary") %>' />
                 </div>
@@ -176,5 +177,6 @@
             CssClass="btn btn-secondary"
             OnClick="btnVerVehiculos_Click" />
     </div>
+
 
 </asp:Content>

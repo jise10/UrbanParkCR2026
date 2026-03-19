@@ -72,6 +72,7 @@ Public Class RegistrarEspacio
             lblEspacioSeleccionado.Text = "Espacio seleccionado (Id): " & hfEspacioId.Value
             lblEspacioSeleccionado.CssClass = "badge bg-success"
             pnlFormulario.Visible = True
+            pnlFormulario.Enabled = True ' habilitamos el panel para que se pueda interactuar
 
         End If
 
