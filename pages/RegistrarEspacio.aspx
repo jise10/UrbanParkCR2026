@@ -5,178 +5,169 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2>Registrar Entrada Vehículo</h2>
+<h2>Registrar Entrada Vehículo</h2>
 
-    <%-- =========================
-         1) ESPACIOS (CARDS)
-         ========================= --%>
+<h4 class="mt-3">1) Selecciona un espacio</h4>
 
-    <h4 class="mt-3">1) Selecciona un espacio</h4>
+<div class="mb-2">
+    <span class="badge bg-success">Disponible</span>
+    <span class="badge bg-danger ms-1">Ocupado</span>
+</div>
 
-    <div class="mb-2">
-        <span class="badge bg-success">Disponible</span>
-        <span class="badge bg-danger ms-1">Ocupado</span>
-    </div>
+<asp:HiddenField ID="hfEspacioId" runat="server" />
 
-    <asp:HiddenField ID="hfEspacioId" runat="server" />
+<div class="mb-3">
+    <asp:Label ID="lblEspacioSeleccionado" runat="server"
+        CssClass="badge bg-secondary"
+        Text="Seleccione un espacio"></asp:Label>
+</div>
 
-    <div class="mb-3">
-        <asp:Label ID="lblEspacioSeleccionado" runat="server"
-            CssClass="badge bg-secondary"
-            Text="Seleccione un espacio para habilitar el formulario"></asp:Label>
-    </div>
+<!-- ESPACIOS -->
+<asp:Repeater ID="rptEspacios" runat="server">
+<ItemTemplate>
 
-    <asp:Repeater ID="rptEspacios" runat="server">
+<div class='card d-inline-block m-2 shadow-sm
+    <%# If(Eval("Estado").ToString() = "Disponible", "border-success", "border-danger") %>'
+    style="width: 13rem;">
 
-        <ItemTemplate>
+    <div class="card-body">
 
-            <div class='card d-inline-block m-2 shadow-sm
-                <%# If(Eval("Estado").ToString() = "Disponible", "border-success", "border-danger") %>'
-                style="width: 13rem;">
+        <h5><%# Eval("Codigo") %></h5>
 
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
+        <span class="badge bg-dark">
+            <%# Eval("TipoPermitido") %>
+        </span>
 
-                        <div>
-                            <h5 class="card-title mb-0">
-                                <%# Eval("Codigo") %>
-                            </h5>
+        <span class='badge <%# If(Eval("Estado").ToString() = "Disponible", "bg-success", "bg-danger") %>'>
+            <%# Eval("Estado") %>
+        </span>
 
-                            <span class="badge bg-dark">
-                                <%# Eval("TipoPermitido") %>
-                            </span>
-                        </div>
-
-                        <span class='badge <%# If(Eval("Estado").ToString() = "Disponible", "bg-success", "bg-danger") %>'>
-                            <%# Eval("Estado") %>
-                        </span>
-
-                    </div>
-
-
-
-
-                    <div class="mt-2 small text-muted">
-                        Zona: <%# Eval("Zona") %><br />
-                        Nivel: <%# Eval("Nivel") %>
-                    </div>
-
-                    <asp:Button
-                        ID="btnSeleccionar"
-                        runat="server"
-                        Text="Seleccionar"
-                        CommandName="select"
-                        CommandArgument='<%# Eval("IdEspacio") %>'
-                        Enabled='<%# Eval("Estado").ToString() = "Disponible" %>'
-                        CausesValidation="False"
-                        CssClass='btn btn-sm w-100 mt-3
-                            <%# If(Eval("Estado").ToString() = "Disponible", "btn-outline-primary", "btn-secondary") %>' />
-                </div>
-            </div>
-
-        </ItemTemplate>
-    </asp:Repeater>
-
-    <hr class="my-4" />
-
-    <%-- =========================
-         2) FORMULARIO
-         ========================= --%>
-
-    <h4>2) Completa los datos del vehículo</h4>
-
-    <asp:Panel ID="pnlFormulario" runat="server">
-
-        <%-- PLACA --%>
-        <div class="form-group">
-            <asp:Label ID="lblPlaca" runat="server" Text="Placa:" CssClass="control-label"></asp:Label>
-            <asp:TextBox ID="txtPlaca" runat="server" CssClass="form-control" placeholder="Ej: ABC123"></asp:TextBox>
+        <div class="mt-2 small text-muted">
+            Zona: <%# Eval("Zona") %><br />
+            Nivel: <%# Eval("Nivel") %>
         </div>
 
-        <asp:RequiredFieldValidator ID="rfvPlaca" runat="server"
-            CssClass="text-danger" Display="Dynamic"
-            ControlToValidate="txtPlaca"
-            ErrorMessage="Debe ingresar la placa" />
+        <asp:Button
+            ID="btnSeleccionar"
+            runat="server"
+            Text="Seleccionar"
+            CommandName="select"
+            CommandArgument='<%# Eval("IdEspacio") %>'
+            Enabled='<%# Eval("Estado").ToString() = "Disponible" %>'
+            CausesValidation="False"
+            CssClass="btn btn-sm btn-outline-primary w-100 mt-3" />
 
+    </div>
+</div>
 
-        <%-- TIPO --%>
-        <div class="form-group">
-            <asp:Label ID="lblTipo" runat="server" Text="Tipo Vehículo:" CssClass="control-label"></asp:Label>
+</ItemTemplate>
+</asp:Repeater>
 
+<!-- 🔥 MODAL (DENTRO DEL CONTENT Y BIEN CERRADO) -->
+<div class="modal fade" id="modalVehiculo" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-            <asp:DropDownList ID="ddlTipo" runat="server" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlTipo_SelectedIndexChanged">
-                <asp:ListItem Text="Seleccione un tipo" Value="0"></asp:ListItem>
-                <asp:ListItem Text="Automóvil" Value="Automóvil"></asp:ListItem>
-                <asp:ListItem Text="Moto" Value="Moto"></asp:ListItem>
-                <asp:ListItem Text="Camión" Value="Camión"></asp:ListItem>
+      <div class="modal-header">
+        <h5 class="modal-title">Registrar Vehículo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
+      <div class="modal-body">
 
+        <!-- VALIDATION SUMMARY -->
+        <asp:ValidationSummary 
+            ID="vsResumen"
+            runat="server"
+            CssClass="alert alert-danger"
+            DisplayMode="BulletList"
+            ValidationGroup="vgVehiculo" />
+
+        <asp:Panel ID="pnlFormulario" runat="server">
+
+            <!-- PLACA -->
+            <asp:TextBox ID="txtPlaca" runat="server"
+                CssClass="form-control"
+                placeholder="Placa"></asp:TextBox>
+
+            <asp:RequiredFieldValidator 
+                ID="rfvPlaca"
+                runat="server"
+                ControlToValidate="txtPlaca"
+                ErrorMessage="Ingrese la placa"
+                CssClass="text-danger"
+                ValidationGroup="vgVehiculo" />
+
+            <!-- TIPO -->
+            <asp:DropDownList ID="ddlTipo" runat="server"
+                CssClass="form-control mt-2">
+                <asp:ListItem Text="Seleccione" Value="0"></asp:ListItem>
+                <asp:ListItem Text="Automóvil"></asp:ListItem>
+                <asp:ListItem Text="Moto"></asp:ListItem>
+                <asp:ListItem Text="Camión"></asp:ListItem>
             </asp:DropDownList>
-        </div>
 
-        <asp:RequiredFieldValidator ID="rfvTipo" runat="server"
-            CssClass="text-danger" Display="Dynamic"
-            InitialValue="0"
-            ControlToValidate="ddlTipo"
-            ErrorMessage="Seleccione el tipo de vehículo" />
+            <asp:RequiredFieldValidator 
+                ID="rfvTipo"
+                runat="server"
+                ControlToValidate="ddlTipo"
+                InitialValue="0"
+                ErrorMessage="Seleccione el tipo"
+                CssClass="text-danger"
+                ValidationGroup="vgVehiculo" />
 
+            <!-- MARCA -->
+            <asp:TextBox ID="txtMarca" runat="server"
+                CssClass="form-control mt-2"
+                placeholder="Marca"></asp:TextBox>
 
-        <%-- MARCA --%>
-        <div class="form-group">
-            <asp:Label ID="lblMarca" runat="server" Text="Marca:" CssClass="control-label"></asp:Label>
-            <asp:TextBox ID="txtMarca" runat="server" CssClass="form-control" placeholder="Ej: Toyota"></asp:TextBox>
-        </div>
+            <asp:RequiredFieldValidator 
+                ID="rfvMarca"
+                runat="server"
+                ControlToValidate="txtMarca"
+                ErrorMessage="Ingrese la marca"
+                CssClass="text-danger"
+                ValidationGroup="vgVehiculo" />
 
-        <asp:RequiredFieldValidator ID="rfvMarca" runat="server"
-            CssClass="text-danger" Display="Dynamic"
-            ControlToValidate="txtMarca"
-            ErrorMessage="Debe ingresar la marca" />
+            <!-- COLOR -->
+            <asp:TextBox ID="txtColor" runat="server"
+                CssClass="form-control mt-2"
+                placeholder="Color"></asp:TextBox>
 
+            <asp:RequiredFieldValidator 
+                ID="rfvColor"
+                runat="server"
+                ControlToValidate="txtColor"
+                ErrorMessage="Ingrese el color"
+                CssClass="text-danger"
+                ValidationGroup="vgVehiculo" />
 
-        <%-- COLOR --%>
-        <div class="form-group">
-            <asp:Label ID="lblColor" runat="server" Text="Color:" CssClass="control-label"></asp:Label>
-            <asp:TextBox ID="txtColor" runat="server" CssClass="form-control" placeholder="Ej: Rojo"></asp:TextBox>
-        </div>
+            <!-- HORA -->
+            <asp:TextBox ID="txtHoraEntrada" runat="server"
+                CssClass="form-control mt-2"
+                TextMode="DateTimeLocal"></asp:TextBox>
 
-        <asp:RequiredFieldValidator ID="rfvColor" runat="server"
-            CssClass="text-danger" Display="Dynamic"
-            ControlToValidate="txtColor"
-            ErrorMessage="Debe ingresar el color" />
+            <asp:RequiredFieldValidator 
+                ID="rfvHora"
+                runat="server"
+                ControlToValidate="txtHoraEntrada"
+                ErrorMessage="Ingrese la hora"
+                CssClass="text-danger"
+                ValidationGroup="vgVehiculo" />
 
-
-        <%-- HORA ENTRADA --%>
-        <div class="form-group">
-            <asp:Label ID="lblHora" runat="server" Text="Hora Entrada:" CssClass="control-label"></asp:Label>
-            <asp:TextBox ID="txtHoraEntrada" runat="server" CssClass="form-control" TextMode="DateTimeLocal"></asp:TextBox>
-        </div>
-
-        <asp:RequiredFieldValidator ID="rfvHora" runat="server"
-            CssClass="text-danger" Display="Dynamic"
-            ControlToValidate="txtHoraEntrada"
-            ErrorMessage="Debe ingresar la hora de entrada" />
-
-
-        <%-- BOTÓN GUARDAR --%>
-        <div class="py-3">
+            <!-- BOTÓN -->
             <asp:Button ID="btnGuardar" runat="server"
                 Text="Registrar"
-                CssClass="btn btn-primary"
+                CssClass="btn btn-primary w-100 mt-3"
+                ValidationGroup="vgVehiculo"
+                CausesValidation="true"
                 OnClick="btnGuardar_Click" />
-        </div>
 
-    </asp:Panel>
+        </asp:Panel>
 
-    <%-- MENSAJE --%>
-    <asp:Label ID="lblMensaje" runat="server"></asp:Label>
-
-    <div class="py-2">
-        <asp:Button ID="btnVerVehiculos"
-            runat="server"
-            Text="Ver Vehículos Registrados"
-            CssClass="btn btn-secondary"
-            OnClick="btnVerVehiculos_Click" />
+      </div>
     </div>
-
+  </div>
+</div>
 
 </asp:Content>

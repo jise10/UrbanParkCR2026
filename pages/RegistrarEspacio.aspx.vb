@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports UrbanParkCR2026.dbVehiculo
+Imports UrbanParkCR2026.dbEspacio ' 
 Imports UrbanParkCR2026.Models
 Imports UrbanParkCR2026.Utils
 
@@ -9,11 +10,17 @@ Public Class RegistrarEspacio
 
     Private dbVehiculo As New VehiculoDB()
     Private dbHelper As New DbHelper()
+    Private dbEspacio As New EspacioDB() ' 
+
+    ' 🔥 MÉTODO PARA ABRIR MODAL
+    Private Sub AbrirModal()
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "modal",
+        "var myModal = new bootstrap.Modal(document.getElementById('modalVehiculo')); myModal.show();", True)
+    End Sub
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             CargarEspacios()
-            pnlFormulario.Visible = False
             hfEspacioId.Value = ""
             lblEspacioSeleccionado.Text = "Seleccione un espacio para habilitar el formulario"
             lblEspacioSeleccionado.CssClass = "badge bg-secondary"
@@ -21,10 +28,8 @@ Public Class RegistrarEspacio
     End Sub
 
     '========================
-    ' CARGAR ESPACIOS (Cards)
+    ' CARGAR ESPACIOS
     '========================
-
-
     Private Sub CargarEspacios(Optional tipo As String = "")
 
         Dim sql As String = "
@@ -34,8 +39,8 @@ Public Class RegistrarEspacio
         ORDER BY Nivel, Zona, Codigo;"
 
         Dim parametros As New List(Of SqlParameter) From {
-        New SqlParameter("@Tipo", tipo)
-    }
+            New SqlParameter("@Tipo", tipo)
+        }
 
         Dim dt As DataTable = dbHelper.ExecuteQuery(sql, parametros)
 
@@ -43,24 +48,7 @@ Public Class RegistrarEspacio
         rptEspacios.DataBind()
 
     End Sub
-    ' esto hace que al cambiar el tipo, se recarguen los espacios filtrados por ese tipo (o todos si es "0")
 
-    Protected Sub ddlTipo_SelectedIndexChanged(sender As Object, e As EventArgs)
-
-        Dim tipoSeleccionado As String = ddlTipo.SelectedValue
-
-        If tipoSeleccionado = "0" Then
-            CargarEspacios("")
-        Else
-            CargarEspacios(tipoSeleccionado)
-        End If
-
-        hfEspacioId.Value = ""
-        lblEspacioSeleccionado.Text = "Seleccione un espacio para habilitar el formulario"
-        lblEspacioSeleccionado.CssClass = "badge bg-secondary"
-        pnlFormulario.Visible = False
-
-    End Sub
     '========================
     ' SELECCIONAR ESPACIO
     '========================
@@ -69,40 +57,42 @@ Public Class RegistrarEspacio
         If e.CommandName = "select" Then
 
             hfEspacioId.Value = e.CommandArgument.ToString()
-            lblEspacioSeleccionado.Text = "Espacio seleccionado (Id): " & hfEspacioId.Value
+
+            lblEspacioSeleccionado.Text = "Espacio seleccionado: " & hfEspacioId.Value
             lblEspacioSeleccionado.CssClass = "badge bg-success"
-            pnlFormulario.Visible = True
-            pnlFormulario.Enabled = True ' habilitamos el panel para que se pueda interactuar
+
+            AbrirModal()
 
         End If
 
     End Sub
 
-
     '========================
-    ' GUARDAR VEHÍCULO + OCUPAR ESPACIO
+    ' GUARDAR VEHÍCULO
     '========================
     Protected Sub btnGuardar_Click(sender As Object, e As EventArgs) Handles btnGuardar.Click
 
-        ' 1) Validar espacio seleccionado
+        '  VALIDACIONES WEBFORMS
+        If Not Page.IsValid Then
+            AbrirModal()
+            Return
+        End If
+
+        ' 1) Validar espacio
         If String.IsNullOrWhiteSpace(hfEspacioId.Value) Then
             SwalUtils.ShowSwalError(Me, "Error", "Debe seleccionar un espacio antes de registrar.")
+            AbrirModal()
             Return
         End If
 
         Dim idEspacio As Integer
         If Not Integer.TryParse(hfEspacioId.Value, idEspacio) Then
             SwalUtils.ShowSwalError(Me, "Error", "Espacio inválido.")
+            AbrirModal()
             Return
         End If
 
-        ' 2) Validar hora
-        If Not IsDate(txtHoraEntrada.Text) Then
-            SwalUtils.ShowSwalError(Me, "Error", "Hora inválida.")
-            Return
-        End If
-
-        ' 3) Crear objeto vehículo
+        ' 2) Crear objeto
         Dim vehiculo As New Vehiculo()
         vehiculo.Placa = txtPlaca.Text.Trim()
         vehiculo.Tipo = ddlTipo.SelectedValue
@@ -111,8 +101,16 @@ Public Class RegistrarEspacio
         vehiculo.HoraEntrada = Convert.ToDateTime(txtHoraEntrada.Text)
         vehiculo.IdEspacio = idEspacio
 
-        ' 4) Antes de insertar, intentar ocupar el espacio (evita duplicados)
-        '    Si otro ya lo ocupó, el UPDATE no afecta filas.
+        '  VALIDAR TIPO (CAPA DB)
+        Dim tipoPermitido As String = dbEspacio.ObtenerTipoPermitido(idEspacio)
+
+        If vehiculo.Tipo <> tipoPermitido Then
+            SwalUtils.ShowSwalError(Me, "Error", "Este espacio es solo para: " & tipoPermitido)
+            AbrirModal()
+            Return
+        End If
+
+        ' 3) Ocupar espacio
         Dim sqlOcupar As String = "
             UPDATE Espacio
             SET Estado='Ocupado', FechaActualizacion=SYSDATETIME()
@@ -125,16 +123,17 @@ Public Class RegistrarEspacio
         Dim filas As Integer = dbHelper.ExecuteNonQuery(sqlOcupar, parametrosOcupar)
 
         If filas = 0 Then
-            SwalUtils.ShowSwalError(Me, "Espacio no disponible", "Ese espacio ya fue ocupado. Seleccione otro.")
+            SwalUtils.ShowSwalError(Me, "Espacio no disponible", "Ese espacio ya fue ocupado.")
             CargarEspacios()
-            pnlFormulario.Enabled = False
+
             hfEspacioId.Value = ""
-            lblEspacioSeleccionado.Text = "Seleccione un espacio para habilitar el formulario"
+            lblEspacioSeleccionado.Text = "Seleccione un espacio"
             lblEspacioSeleccionado.CssClass = "badge bg-secondary"
+
             Return
         End If
 
-        ' 5) Insertar vehículo (DEBES actualizar VehiculoDB para que inserte IdEspacio)
+        ' 4) Insertar
         Dim id As Integer = dbVehiculo.InsertarVehiculo(vehiculo)
 
         If id > 0 Then
@@ -142,14 +141,12 @@ Public Class RegistrarEspacio
                               $"Vehículo {vehiculo.Placa} registrado con ID {id}.",
                               "success")
 
-            ' refrescar cards y reset
             CargarEspacios()
-            pnlFormulario.Enabled = False
+
             hfEspacioId.Value = ""
-            lblEspacioSeleccionado.Text = "Seleccione un espacio para habilitar el formulario"
+            lblEspacioSeleccionado.Text = "Seleccione un espacio"
             lblEspacioSeleccionado.CssClass = "badge bg-secondary"
 
-            ' limpiar inputs
             txtPlaca.Text = ""
             ddlTipo.SelectedValue = "0"
             txtMarca.Text = ""
@@ -157,7 +154,6 @@ Public Class RegistrarEspacio
             txtHoraEntrada.Text = ""
 
         Else
-            ' Si falló el INSERT, volvemos a dejar el espacio disponible (para no “bloquearlo”)
             Dim sqlLiberar As String = "
                 UPDATE Espacio
                 SET Estado='Disponible', FechaActualizacion=SYSDATETIME()
@@ -166,16 +162,9 @@ Public Class RegistrarEspacio
             dbHelper.ExecuteNonQuery(sqlLiberar, parametrosOcupar)
 
             SwalUtils.ShowSwalError(Me, "Error", "No se pudo registrar.")
+            AbrirModal()
         End If
 
-    End Sub
-
-    Protected Sub btnVerVehiculos_Click(sender As Object, e As EventArgs)
-        Response.Redirect("~/pages/EmpleadoVehiculo.aspx")
-    End Sub
-
-    Protected Sub btnVerEspacios_Click(sender As Object, e As EventArgs)
-        Response.Redirect("~/pages/EmpleadoEspacio.aspx")
     End Sub
 
 End Class
