@@ -5,9 +5,9 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-<h2>Registrar Entrada Vehículo</h2>
-
-<h4 class="mt-3">1) Selecciona un espacio</h4>
+<h2 style = " color:#ffffff;">Registrar Entrada Vehículo</h2>
+    
+<h4 style="color:antiquewhite;"class="mt-3">1 ) Selecciona un espacio</h4>
 
 <div class="mb-2">
     <span class="badge bg-success">Disponible</span>

@@ -3,7 +3,8 @@
     <asp:GridView ID="gvVehiculos"
     runat="server"
     AutoGenerateColumns="False"
-    DataKeyNames="IdVehiculo"
+   
+    DataKeyNames="IdVehiculo,HoraEntrada"
     CssClass="table table-bordered table-striped"
     Width="100%"
     OnRowCommand="gvVehiculos_RowCommand">
