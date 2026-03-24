@@ -243,6 +243,7 @@
     </Compile>
     <Compile Include="Models\Espacio.vb" />
     <Compile Include="Models\Pago.vb" />
+    <Compile Include="Models\Usuario.vb" />
     <Compile Include="Models\Vehiculo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -299,6 +300,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Utils\DbHelper.vb" />
+    <Compile Include="Utils\Simple3Des.vb" />
     <Compile Include="Utils\SwalUtils.vb" />
     <Compile Include="ViewSwitcher.ascx.vb">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
