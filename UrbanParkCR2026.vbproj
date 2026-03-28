@@ -149,6 +149,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="pages\EmpleadoVehiculo.aspx" />
+    <Content Include="pages\Inicio.aspx" />
     <Content Include="pages\Login.aspx" />
     <Content Include="pages\RegistrarEspacio.aspx" />
     <Content Include="pages\Registro.aspx" />
@@ -271,6 +272,13 @@
       <DependentUpon>EmpleadoVehiculo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="pages\Inicio.aspx.designer.vb">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\Inicio.aspx.vb">
+      <DependentUpon>Inicio.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="pages\Login.aspx.designer.vb">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
@@ -299,6 +307,7 @@
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Users\UserDB.vb" />
     <Compile Include="Utils\DbHelper.vb" />
     <Compile Include="Utils\Simple3Des.vb" />
     <Compile Include="Utils\SwalUtils.vb" />

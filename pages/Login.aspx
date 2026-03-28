@@ -34,7 +34,7 @@
                     Keep me logged in
                 </label>
 
-                <a href="#">Forgot Password?</a>
+                <a href="Registro.aspx">Forgot Password?</a>
             </div>
 
             <asp:Button ID="btnLogin" runat="server" Text="Login" CssClass="btn" />

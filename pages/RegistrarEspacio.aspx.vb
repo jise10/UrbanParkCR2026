@@ -56,16 +56,32 @@ Public Class RegistrarEspacio
 
         If e.CommandName = "select" Then
 
-            hfEspacioId.Value = e.CommandArgument.ToString()
+            ' 🔥 Separar ID y Tipo
+            Dim datos() As String = e.CommandArgument.ToString().Split("|"c)
 
-            lblEspacioSeleccionado.Text = "Espacio seleccionado: " & hfEspacioId.Value
+            Dim idEspacio As String = datos(0)
+            Dim tipo As String = datos(1)
+
+            ' Guardar ID
+            hfEspacioId.Value = idEspacio
+
+            ' Mostrar info
+            lblEspacioSeleccionado.Text = "Espacio seleccionado: " & idEspacio & " (" & tipo & ")"
             lblEspacioSeleccionado.CssClass = "badge bg-success"
 
+            ' 🔥 Seleccionar automáticamente el tipo
+            ddlTipo.SelectedValue = tipo
+
+            ' 🔥 Bloquear dropdown (para que no sea redundante)
+            ddlTipo.Enabled = False
+
+            ' Abrir modal
             AbrirModal()
 
         End If
 
     End Sub
+
 
     '========================
     ' GUARDAR VEHÍCULO

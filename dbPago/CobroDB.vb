@@ -3,25 +3,25 @@ Imports UrbanParkCR2026.Utils
 
 Namespace dbPago
     Public Class CobroDB
+
         Private dbHelper As New DbHelper()
+
         Public Function CalcularCobro(tipoVehiculo As String,
-                      horaEntrada As DateTime,
-                      metodoPago As String) As Pago
+                                      horaEntrada As DateTime,
+                                      metodoPago As String) As Pago
 
             Dim horaSalida As DateTime = DateTime.Now
 
-            ' 🔥 SOLUCIÓN REAL: cortar decimales (NO redondear)
+            '  Calcular diferencia en horas correctamente
+            Dim diferencia As TimeSpan = horaSalida - horaEntrada
+
+            '  REDONDEO CORRECTO (sin errores por segundos)
             Dim minutos As Integer = Math.Floor((horaSalida - horaEntrada).TotalMinutes)
 
-            ' Calcular horas
-            Dim horasCobradas As Integer = Math.Ceiling(minutos / 60.0)
+            Dim horasCobradas As Integer = Math.Max(1, Math.Ceiling(minutos / 60.0))
 
-            ' Mínimo 1 hora
-            If horasCobradas = 0 Then
-                horasCobradas = 1
-            End If
 
-            ' Tarifas por tipo
+            '  TARIFAS
             Dim tarifa As Decimal
 
             Select Case tipoVehiculo
@@ -35,16 +35,18 @@ Namespace dbPago
                     tarifa = 1000
             End Select
 
-            ' Cálculo
+            '  CÁLCULO
             Dim subtotal As Decimal = horasCobradas * tarifa
             Dim iva As Decimal = 0
             Dim total As Decimal = subtotal
 
+            ' IVA solo si es tarjeta
             If metodoPago = "Tarjeta" Then
                 iva = subtotal * 0.13D
                 total = subtotal + iva
             End If
 
+            '  RETORNAR OBJETO
             Return New Pago With {
                 .HorasCobradas = horasCobradas,
                 .Tarifa = tarifa,

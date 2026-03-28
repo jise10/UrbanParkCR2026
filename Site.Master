@@ -1,24 +1,25 @@
 ﻿<%@ Master Language="VB" AutoEventWireup="true" CodeBehind="Site.master.vb" Inherits="UrbanParkCR2026.SiteMaster" %>
 
 <!DOCTYPE html>
+
 <html lang="es">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title><%: Page.Title %> - Mi aplicación ASP.NET</title>
+<title><%: Page.Title %> - UrbanPark 🚗</title>
 
-<!-- ❌ Quitamos bundles viejos de CSS (pueden meter Bootstrap viejo) -->
-<!-- <webopt:bundlereference runat="server" path="~/Content/css" /> -->
+<!-- Bootstrap 5 -->
 
-<!-- ✅ Bootstrap 5 (EL QUE VAS A USAR) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <style>
+
+<style>
+/* FONDO PARQUEO */
 body {
-    background-image: url('/Content/images/fondo3.jpg');
+    background-image: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -30,49 +31,103 @@ body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.1);
     pointer-events: none;
 }
 
-/* contenedor */
+/* CONTENEDOR */
 .body-content {
-    background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    background: rgba(15,15,15,0.85);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #ffc107;
+    box-shadow: 
+        0 0 15px rgba(255,193,7,0.3),
+        0 10px 40px rgba(0,0,0,0.9);
 }
 
-/* cards */
-.card {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.3);
+/* NAVBAR */
+.navbar {
+    border-bottom: 3px solid #ffc107;
+}
+
+/* TABLA */
+.table {
+    background: rgba(0,0,0,0.7);
+    color: black;
     border-radius: 15px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #ffc107;
+    color: black;
+    font-weight: bold;
+}
+
+.table tbody tr:hover {
+    background: rgba(255,193,7,0.2);
+}
+
+/* BOTONES */
+.btn-primary {
+    background-color: #ffc107;
+    border: none;
+    color: black;
+    font-weight: bold;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #dc3545, #ff6b6b);
+    border: none;
+}
+
+.espacio-card {
+    background-color: #2a2a2a !important; /* gris elegante */
+    color: white !important;
+    border-radius: 12px;
+    border: 2px solid #ffc107;
+    transition: all 0.3s ease;
+}
+
+.espacio-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    border-color: #ffd54f; /* amarillo más claro */
+}
+
+.espacio-card .text-muted {
+    color: #ccc !important;
+}
+
+.espacio-card .btn-outline-primary {
+    color: #4da3ff;
+    border-color: #4da3ff;
+}
+
+.espacio-card .btn-outline-primary:hover {
+    background-color: #4da3ff;
     color: white;
 }
-
-/* texto */
-.card h5,
-.card .small,
-.card span {
-    color: white !important;
+.borde-disponible {
+    border: 2px solid #ffc107 !important;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
 }
 
-/* 🔥 MODAL FIX */
-.modal {
-    z-index: 9999 !important;
+.borde-ocupado {
+    border: 2px solid #ff4d4d !important; /* rojo más moderno */
 }
 
-.modal-backdrop {
-    z-index: 9998 !important;
+.contenedor-transparente {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: white;
 }
-
-.modal-dialog {
-    z-index: 10000 !important;
+.card.contenedor-transparente {
+    background: transparent !important;
 }
 </style>
-
-
 
 
 </head>
@@ -80,51 +135,52 @@ body::before {
 <body>
 <form runat="server">
 
-    <!-- ScriptManager (OK) -->
-    <asp:ScriptManager runat="server">
-        <Scripts>
-            <asp:ScriptReference Name="MsAjaxBundle" />
-            <asp:ScriptReference Name="jquery" />
-            <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-            <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-        </Scripts>
-    </asp:ScriptManager>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" runat="server" href="~/">UrbanPark</a>
+<asp:ScriptManager runat="server">
+    <Scripts>
+        <asp:ScriptReference Name="MsAjaxBundle" />
+        <asp:ScriptReference Name="jquery" />
+        <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+        <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+    </Scripts>
+</asp:ScriptManager>
 
-            <button type="button" class="navbar-toggler"
-                data-bs-toggle="collapse"
-                data-bs-target=".navbar-collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<!-- 🚗 NAVBAR -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" runat="server" href="~/">🅿️ UrbanPark</a>
 
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Acerca de</a></li>
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contacto</a></li>
-                </ul>
-            </div>
+        <button type="button" class="navbar-toggler"
+            data-bs-toggle="collapse"
+            data-bs-target=".navbar-collapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item"><a class="nav-link" runat="server" href="~/">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Espacios</a></li>
+                <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Reservas</a></li>
+            </ul>
         </div>
-    </nav>
-
-    <!-- CONTENIDO -->
-    <div class="container body-content mt-4">
-        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-        <hr />
-        <footer>
-            <p>&copy; <%: DateTime.Now.Year %> - UrbanPark</p>
-        </footer>
     </div>
+</nav>
 
-    <!-- ✅ Bootstrap JS (IMPORTANTE PARA MODAL) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- CONTENIDO -->
+<div class="container body-content mt-4">
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    <hr />
+    <footer class="text-center text-light">
+        <p>&copy; <%: DateTime.Now.Year %> - UrbanPark 🚗 Sistema de Parqueo</p>
+    </footer>
+</div>
 
-    <!-- ✅ SweetAlert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </form>
 

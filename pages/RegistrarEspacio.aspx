@@ -25,6 +25,7 @@
 <!-- ESPACIOS -->
 <asp:Repeater ID="rptEspacios" runat="server">
 <ItemTemplate>
+    
 
 <div class='card d-inline-block m-2 shadow-sm
     <%# If(Eval("Estado").ToString() = "Disponible", "border-success", "border-danger") %>'
@@ -52,7 +53,8 @@
             runat="server"
             Text="Seleccionar"
             CommandName="select"
-            CommandArgument='<%# Eval("IdEspacio") %>'
+            CommandArgument='<%# Eval("IdEspacio") & "|" & Eval("TipoPermitido") %>'
+          
             Enabled='<%# Eval("Estado").ToString() = "Disponible" %>'
             CausesValidation="False"
             CssClass="btn btn-sm btn-outline-primary w-100 mt-3" />
@@ -97,15 +99,17 @@
                 ErrorMessage="Ingrese la placa"
                 CssClass="text-danger"
                 ValidationGroup="vgVehiculo" />
-
-            <!-- TIPO -->
             <asp:DropDownList ID="ddlTipo" runat="server"
-                CssClass="form-control mt-2">
-                <asp:ListItem Text="Seleccione" Value="0"></asp:ListItem>
-                <asp:ListItem Text="Automóvil"></asp:ListItem>
-                <asp:ListItem Text="Moto"></asp:ListItem>
-                <asp:ListItem Text="Camión"></asp:ListItem>
-            </asp:DropDownList>
+    CssClass="form-control mt-2">
+
+    <asp:ListItem Text="Seleccione" Value="0"></asp:ListItem>
+    <asp:ListItem Text="Automóvil" Value="Automóvil"></asp:ListItem>
+    <asp:ListItem Text="Moto" Value="Moto"></asp:ListItem>
+    <asp:ListItem Text="Camión" Value="Camión"></asp:ListItem>
+
+</asp:DropDownList>
+
+      
 
             <asp:RequiredFieldValidator 
                 ID="rfvTipo"
