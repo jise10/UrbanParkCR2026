@@ -14,7 +14,7 @@ Public Class EmpleadoVehiculo
             CargarVehiculos()
         End If
 
-        ' 🔥 CAPTURAR EL POSTBACK DEL MODAL (AQUÍ VA TODO)
+        '  EL POSTBACK DEL MODAL (AQUÍ VA TODO captuara el metodo de pago)
         Dim metodo As String = Request("__EVENTARGUMENT")
 
         If metodo = "Efectivo" Or metodo = "Tarjeta" Then
@@ -50,55 +50,62 @@ Public Class EmpleadoVehiculo
         gvVehiculos.DataSource = dbVehiculo.ListarVehiculos()
         gvVehiculos.DataBind()
     End Sub
-
-    ' 🔥 BOTÓN REGISTRAR SALIDA
     Protected Sub gvVehiculos_RowCommand(sender As Object, e As GridViewCommandEventArgs)
 
         If e.CommandName = "Salida" Then
 
-            Dim rowIndex As Integer = Convert.ToInt32(e.CommandArgument)
-            Dim id As Integer = Convert.ToInt32(gvVehiculos.DataKeys(rowIndex).Value)
+            ' 🔥 ID directo
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
 
-            Dim row As GridViewRow = gvVehiculos.Rows(rowIndex)
+            ' 🔥 Obtener la fila desde el botón
+            Dim btn As Button = CType(e.CommandSource, Button)
+            Dim row As GridViewRow = CType(btn.NamingContainer, GridViewRow)
 
             Dim tipo As String = row.Cells(2).Text
             Dim horaEntrada As DateTime
+            Dim horaSalida As DateTime = DateTime.Now
 
             DateTime.TryParse(row.Cells(6).Text, horaEntrada)
 
             ' 🔥 Calcular cobro
             Dim cobroDB As New CobroDB()
-            Dim pagoCalculado As Pago = cobroDB.CalcularCobro(tipo, horaEntrada, "Efectivo")
 
-            ' Guardar en Session
+            Dim pagoCalculado As Pago = cobroDB.CalcularCobro(tipo, horaEntrada, horaSalida, "Efectivo")
+
+
+            ' 🔥 Guardar en Session
             Session("IdVehiculo") = id
             Session("PagoCalculado") = pagoCalculado
 
-            ' 🔥 Modal SweetAlert
+            ' 🔥 Modal SweetAlert uso intereactivo de uun javascript para mostrar el modal con la información del pago y la selección del método de pago
             Dim script As String = "
-            Swal.fire({
-                title: 'Confirmar pago',
-                html: '<b>Horas:</b> " & pagoCalculado.HorasCobradas & "<br>' +
-                      '<b>Total:</b> ₡" & pagoCalculado.Total & "',
-                input: 'select',
-                inputOptions: {
-                    'Efectivo': 'Efectivo',
-                    'Tarjeta': 'Tarjeta'
-                },
-                inputPlaceholder: 'Seleccione método de pago',
-                showCancelButton: true,
-                confirmButtonText: 'Cobrar y salir'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    __doPostBack('', result.value);
-                }
-            });
-            "
+
+Swal.fire({
+    title: 'Confirmar pago',
+    html: '<b>Horas:</b> " & pagoCalculado.HorasCobradas & "<br>' +
+          '<b>Total:</b> ₡" & pagoCalculado.Total & "',
+    input: 'select',
+    inputOptions: {
+        'Efectivo': 'Efectivo',
+        'Tarjeta': 'Tarjeta'
+    },
+    inputPlaceholder: 'Seleccione método de pago',
+    showCancelButton: true,
+    confirmButtonText: 'Cobrar y salir'
+}).then((result) => {
+    if (result.isConfirmed) {
+        __doPostBack('gvVehiculos', result.value);
+    }
+});
+"
+
 
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "modalPago", script, True)
 
         End If
 
     End Sub
+
+
 
 End Class

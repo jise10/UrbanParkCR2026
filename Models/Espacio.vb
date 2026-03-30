@@ -6,4 +6,6 @@
         Public Property Nivel As Integer
         Public Property Estado As String
     End Class
+
+
 End Namespace

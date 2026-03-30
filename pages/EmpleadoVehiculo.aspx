@@ -34,7 +34,8 @@
                         runat="server"
                         Text="Registrar Salida"
                         CommandName="Salida"
-                        CommandArgument='<%# Container.DataItemIndex %>'
+                        CommandArgument='<%# Eval("IdVehiculo") %>'
+                        
                         CssClass="btn btn-danger btn-sm" />
                 </ItemTemplate>
             </asp:TemplateField>
