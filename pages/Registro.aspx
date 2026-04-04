@@ -42,11 +42,8 @@
             <!-- BOTÓN -->
             <asp:Button ID="btnRegistrar" runat="server" Text="Crear Cuenta" CssClass="btn" />
 
-            <!-- LINK LOGIN -->
-            <p class="login-link">
-                ¿Ya tienes cuenta?
-                <a href="Login.aspx">Iniciar sesión</a>
-            </p>
+
+          
 
         </div>
 

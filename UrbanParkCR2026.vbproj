@@ -142,17 +142,20 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\dashboard.css" />
     <Content Include="Content\login.css" />
     <Content Include="Content\registro.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="pages\Admin.aspx" />
     <Content Include="pages\EmpleadoVehiculo.aspx" />
     <Content Include="pages\Inicio.aspx" />
     <Content Include="pages\Login.aspx" />
     <Content Include="pages\RegistrarEspacio.aspx" />
     <Content Include="pages\Registro.aspx" />
+    <Content Include="pages\Tarifas.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -212,6 +215,7 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admindb\AdMetodos.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
     <Compile Include="About.aspx.designer.vb">
@@ -229,6 +233,7 @@
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="dbEspacio\EspacioDB.vb" />
+    <Compile Include="dbTarifa\TarifaDB.vb" />
     <Compile Include="dbPago\CobroDB.vb" />
     <Compile Include="dbPago\PagoDB.vb" />
     <Compile Include="dbVehiculo_acceso\VehiculoDB.vb" />
@@ -265,6 +270,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="pages\Admin.aspx.designer.vb">
+      <DependentUpon>Admin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\Admin.aspx.vb">
+      <DependentUpon>Admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="pages\EmpleadoVehiculo.aspx.designer.vb">
       <DependentUpon>EmpleadoVehiculo.aspx</DependentUpon>
     </Compile>
@@ -298,6 +310,13 @@
     </Compile>
     <Compile Include="pages\Registro.aspx.vb">
       <DependentUpon>Registro.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="pages\Tarifas.aspx.designer.vb">
+      <DependentUpon>Tarifas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\Tarifas.aspx.vb">
+      <DependentUpon>Tarifas.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Site.Master.designer.vb">

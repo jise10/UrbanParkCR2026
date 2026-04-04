@@ -5,4 +5,9 @@
 
     End Sub
 
+    Protected Sub btnRegistrar_Click(sender As Object, e As EventArgs) Handles btnRegistrar.Click
+        Response.Redirect("Admin.aspx")
+
+    End Sub
+
 End Class

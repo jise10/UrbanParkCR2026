@@ -94,6 +94,30 @@ Namespace Utils
             Return dt
 
         End Function
+        Public Function ExecuteDataTable(sql As String, Optional parametros As List(Of SqlParameter) = Nothing) As DataTable
+
+            Dim dt As New DataTable()
+
+            Using conn As New SqlConnection(connectionString)
+                Using cmd As New SqlCommand(sql, conn)
+
+                    ' Agregar parámetros si existen
+                    If parametros IsNot Nothing Then
+                        cmd.Parameters.AddRange(parametros.ToArray())
+                    End If
+
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+
+                End Using
+            End Using
+
+            Return dt
+
+        End Function
+
+
 
 
     End Class

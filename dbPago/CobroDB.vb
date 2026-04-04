@@ -1,5 +1,6 @@
 ﻿Imports UrbanParkCR2026.Models
 Imports UrbanParkCR2026.Utils
+Imports UrbanParkCR2026.dbTarifa
 
 Namespace dbPago
     Public Class CobroDB
@@ -11,7 +12,7 @@ Namespace dbPago
                                       horaSalida As DateTime,
                                       metodoPago As String) As Pago
 
-
+            ' ⏱ TIEMPO
             Dim tiempo As TimeSpan = horaSalida - horaEntrada
 
             Dim horasEnteras As Integer = Math.Floor(tiempo.TotalHours)
@@ -27,19 +28,10 @@ Namespace dbPago
             End If
 
             horasCobradas = Math.Max(1, horasCobradas)
-            '  TARIFAS
-            Dim tarifa As Decimal
 
-            Select Case tipoVehiculo
-                Case "Moto"
-                    tarifa = 800
-                Case "Automóvil"
-                    tarifa = 1200
-                Case "Camión"
-                    tarifa = 2000
-                Case Else
-                    tarifa = 1000
-            End Select
+            '  TARIFA DESDE BD
+            Dim tarifaDB As New TarifaDB()
+            Dim tarifa As Decimal = tarifaDB.ObtenerTarifa(tipoVehiculo)
 
             '  CÁLCULOS
             Dim subtotal As Decimal = horasCobradas * tarifa
@@ -52,7 +44,7 @@ Namespace dbPago
                 total = subtotal + iva
             End If
 
-            '  RETORNAR OBJETO
+            ' 📦 RETORNAR OBJETO
             Return New Pago With {
                 .HorasCobradas = horasCobradas,
                 .Tarifa = tarifa,
@@ -60,7 +52,7 @@ Namespace dbPago
                 .IVA = iva,
                 .Total = total,
                 .MetodoPago = metodoPago,
-                .FechaPago = horaSalida ' 
+                .FechaPago = horaSalida
             }
 
         End Function
