@@ -247,6 +247,7 @@
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="usarios\loginDB.vb" />
     <Compile Include="Models\Espacio.vb" />
     <Compile Include="Models\Pago.vb" />
     <Compile Include="Models\Usuario.vb" />
@@ -310,7 +311,7 @@
     </Compile>
     <Compile Include="pages\Registro.aspx.vb">
       <DependentUpon>Registro.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="pages\Tarifas.aspx.designer.vb">
       <DependentUpon>Tarifas.aspx</DependentUpon>

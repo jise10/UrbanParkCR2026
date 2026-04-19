@@ -1,19 +1,22 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Registro.aspx.vb" Inherits="UrbanParkCR2026.Registro" %>
 
-
 <!DOCTYPE html>
 <html>
 <head runat="server">
     <title>Registro</title>
+
     <link href="~/Content/registro.css" rel="stylesheet" runat="server" />
+
+    <!-- SWEETALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
 
 <form id="form1" runat="server">
 
     <div class="container">
 
-        <!-- IZQUIERDA (FORMULARIO) -->
         <div class="left">
 
             <h2 class="logo">UrbanParkCR</h2>
@@ -39,15 +42,19 @@
             <label>Confirmar Contraseña</label>
             <asp:TextBox ID="txtConfirmar" runat="server" CssClass="input" TextMode="Password" placeholder="********"></asp:TextBox>
 
+            <!-- ROL -->
+            <label>Rol</label>
+            <asp:DropDownList ID="ddlRol" runat="server" CssClass="input">
+                <asp:ListItem Text="Seleccione un rol" Value=""></asp:ListItem>
+                <asp:ListItem Text="Administrador" Value="ADMIN"></asp:ListItem>
+                <asp:ListItem Text="Usuario" Value="USER"></asp:ListItem>
+            </asp:DropDownList>
+
             <!-- BOTÓN -->
-            <asp:Button ID="btnRegistrar" runat="server" Text="Crear Cuenta" CssClass="btn" />
-
-
-          
+            <asp:Button ID="btnRegistrar" runat="server" Text="Crear Cuenta" CssClass="btn" OnClick="btnRegistrar_Click" />
 
         </div>
 
-        <!-- DERECHA (IMAGEN) -->
         <div class="right">
             <img src='<%= ResolveUrl("~/Content/images/1.webp") %>' />
         </div>

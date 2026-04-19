@@ -5,6 +5,7 @@
 <head runat="server">
     <title>UrbanParkCR - Login</title>
     <link href="~/Content/login.css" rel="stylesheet" runat="server" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
