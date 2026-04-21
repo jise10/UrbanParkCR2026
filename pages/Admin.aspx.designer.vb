@@ -50,15 +50,6 @@ Partial Public Class Admin
     Protected WithEvents lblEspacios As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control GridView1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents GridView1 As Global.System.Web.UI.WebControls.GridView
-
-    '''<summary>
     '''Control gvUsuarios.
     '''</summary>
     '''<remarks>

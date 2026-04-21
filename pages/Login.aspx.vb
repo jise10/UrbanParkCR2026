@@ -15,7 +15,7 @@ Public Class Login
                 Response.Redirect("Admin.aspx")
 
             Case "USER"
-                Response.Redirect("RegistrarEspacio.aspx")
+                Response.Redirect("EmpleadoVehiculo.aspx")
 
             Case "NO_EXISTE"
                 MostrarSwal("Error", "Usuario no existe", "error")
