@@ -23,6 +23,15 @@ Partial Public Class RegistrarEspacio
     Protected WithEvents btnVolver As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''Control gvTarifasCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents gvTarifasCliente As Global.System.Web.UI.WebControls.GridView
+
+    '''<summary>
     '''Control hfEspacioId.
     '''</summary>
     '''<remarks>

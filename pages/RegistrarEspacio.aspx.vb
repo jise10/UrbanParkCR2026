@@ -1,7 +1,8 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
-Imports UrbanParkCR2026.dbVehiculo
 Imports UrbanParkCR2026.dbEspacio ' 
+Imports UrbanParkCR2026.dbTarifa
+Imports UrbanParkCR2026.dbVehiculo
 Imports UrbanParkCR2026.Models
 Imports UrbanParkCR2026.Utils
 
@@ -24,6 +25,7 @@ Public Class RegistrarEspacio
             hfEspacioId.Value = ""
             lblEspacioSeleccionado.Text = "Seleccione un espacio para habilitar el formulario"
             lblEspacioSeleccionado.CssClass = "badge bg-secondary"
+            CargarTarifas()
         End If
     End Sub
 
@@ -79,6 +81,14 @@ Public Class RegistrarEspacio
             AbrirModal()
 
         End If
+
+    End Sub
+    Private Sub CargarTarifas()
+
+        Dim tarifaDB As New TarifaDB()
+
+        gvTarifasCliente.DataSource = tarifaDB.ObtenerTodas()
+        gvTarifasCliente.DataBind()
 
     End Sub
 

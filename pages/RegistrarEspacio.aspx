@@ -20,6 +20,22 @@
             <h2>Registrar Entrada Vehículo</h2>
 
             <h4 class="mt-3">1 ) Selecciona un espacio</h4>
+            <h4 class="mt-3">Tarifas</h4>
+            <asp:GridView ID="gvTarifasCliente" runat="server"
+                CssClass="table table-bordered"
+                AutoGenerateColumns="False">
+
+                <Columns>
+
+                    <asp:BoundField DataField="TipoVehiculo" HeaderText="Tipo" />
+
+                    <asp:BoundField DataField="PrecioHora" HeaderText="Precio por Hora (₡)" />
+
+                </Columns>
+
+            </asp:GridView>
+
+
 
             <div class="mb-2">
                 <span class="badge bg-success">Disponible</span>
